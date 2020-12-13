@@ -137,7 +137,7 @@
         },
 
         mounted() {
-            axios.post('http://localhost:9000/product')
+            axios.post(process.env.VUE_APP_URL + 'product')
                 .then(res => {
                     this.datas = res.data.result
                 })
@@ -243,15 +243,49 @@
             height: 50px;   
         }
     }
-
-     @media (max-width: 992px) {
-        /* nav {
+    @media (min-width: 768px) {
+        nav {
             height: 100%;
             width: 70px;
             z-index: 999;
-        } */
+        }
+
+        nav img {
+            width: 40px;
+        }
+
+        .menu {
+            padding-top: 20px;
+            height: 50px;   
+        }
+    }
+
+     @media (min-width: 992px) {
+        nav {
+            height: 100%;
+            width: 70px;
+            z-index: 999;
+        }
+
+        nav img {
+            width: 40px;
+        }
+
+        .menu {
+            padding-top: 20px;
+            height: 50px;   
+        }
 
 
         
     }
+    
+    @media (min-width: 992px) {
+       nav {
+            height: 100%;
+            width: 100px;
+            z-index: 999;
+        }
+    }
+
 </style>

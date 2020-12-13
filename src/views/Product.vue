@@ -8,7 +8,7 @@
                     <div class="cardContainer">
                         <div class="container-card d-flex flex-wrap">
                             <div class="pl-3" v-for="card in datas" :key="card.id" @click="clickCard(card)">
-                                <Card  :image="card.image" :name="card.name" :price="card.price" :type="card.type" />
+                                <Card :image="card.image" :name="card.name" :price="card.price" :type="card.type" />
                             </div>
                         </div>
                     </div>
@@ -20,19 +20,21 @@
                         <div class="cartfill" v-show="!isHidden">
 
                             <div class="cartfilltwo">
-                                <div>
-                                    <div class="cartright">
-                                        <img class="card float-left shadow" :src="{image}" :alt="{name}">
-                                        <h1 class="ml-2 pt-2">{{cart.name}}</h1>
+                                <div v-for="cartright in cart" :key="cartright.id">
+                                    <div class="cartright ">
+                                        <img class="card float-left shadow" :alt="{name}">
+                                        <h1 class="ml-2 pt-2">{{cartright.name}}</h1>
                                         <div class="btn-group me-2 " role="group" aria-label="First group">
                                             <button type="button" class="btn btn-primary">+</button>
                                             <button type="button" class="btn btn-light disabled">0</button>
                                             <button type="button" class="btn btn-warning"
                                                 @click="clickCard()">-</button>
                                         </div>
-                                        <button class="btn btn-danger float-right"> X </button>
+                                        <button class="btn btn-danger float-right" @click="clickDelete(cartright.id)"> X
+                                        </button>
                                     </div>
                                 </div>
+
                                 <div class="containerTotalBuy ">
                                     <h4 class="float-right">Price</h4>
                                     <h4 class="float-left">Total</h4>
@@ -81,6 +83,7 @@
                 sort: 10000,
                 isHidden: true,
                 cart: [],
+                cartright: [],
                 cartTotal: [],
 
 
@@ -97,17 +100,20 @@
             erese() {
                 this.isHidden = !this.isHidden
             },
-
             clickCard(value) {
                 this.erese()
                 this.cart.push(value)
 
             },
+            clickDelete(cartright) {
+                this.cartright.splice(cartright, 1)
+            },
+
 
 
         },
         mounted() {
-            axios.get('http://localhost:4000/product')
+            axios.get(process.env.VUE_APP_URL + 'product')
                 .then(res => {
                     this.datas = res.data.result
                 })
@@ -202,6 +208,10 @@
         margin-top: 90px;
     }
 
+    .cartfilltwo .cartright {
+        margin-left: 0;
+    }
+
 
     @media (max-width: 576px) {
         .container-card {
@@ -223,17 +233,205 @@
 
     }
 
-    @media (max-width: 992px) {
-        .cartContainer {
-            display: none;
+    @media (min-width: 992px) {
+        .container-card {
+            margin-left: 100px;
+            margin-top: 100px;
         }
 
-        .container-card {
-            margin-left: 20px;
-            margin-top: 50px;
+        cart 
+        .cartContainer {
+            box-shadow: -1px 7px -20px 0px #888;
+            position: fixed;
+            margin-top: 100px;
+            margin-left: 85px;
+            width: 100%;
+            height: 100%;
         }
+
+
+        .empty img {
+            position: absolute;
+            right: 75%;
+        }
+
+        .empty h1 {
+            font-size: 10px;
+            font-weight: normal;
+        }
+
+        .empty>h2 {
+            position: absolute;
+            margin-top: 200px;
+            right: 75%;
+            font-size: 25px;
+        }
+
+        .empty>p {
+            position: absolute;
+            margin-top: 240px;
+            right: 71%;
+        }
+
+        .txtCart {
+            color: rgb(199, 191, 191);
+            font-size: 1rem;
+        }
+
     }
 
+    
+    @media (max-width: 992px) {
 
-    @media (max-width: 1200px) {}
+        .container-card {
+            margin-left: 80px;
+            margin-top: 50px;
+        }
+
+        /* cart */
+        .cartContainer {
+            background-color: #fff;
+            box-shadow: -1px 7px -20px 0px #888;
+            position: fixed;
+            margin-top: 70px;
+            margin-left: 10px;
+            width: 100%;
+            height: 100%;
+        }
+
+
+        .empty img {
+            position: absolute;
+            right: 75%;
+        }
+
+        .empty h1 {
+            font-size: 10px;
+            font-weight: normal;
+        }
+
+        .empty>h2 {
+            position: absolute;
+            margin-top: 200px;
+            right: 75%;
+            font-size: 25px;
+        }
+
+        .empty>p {
+            position: absolute;
+            margin-top: 240px;
+            right: 71%;
+        }
+
+        .txtCart {
+            color: rgb(199, 191, 191);
+            font-size: 1rem;
+        }
+
+
+    }
+
+    
+
+
+    @media (min-width: 1200px) {
+
+        .container-card {
+            margin-left: 80px;
+            margin-top: 100px;
+        }
+
+        /* cart */
+        .cartContainer {
+            background-color: #fff;
+            box-shadow: -1px 7px -20px 0px #888;
+            position: fixed;
+            margin-top: 70px;
+            margin-left: 10px;
+            width: 100%;
+            height: 100%;
+        }
+
+
+        .empty img {
+            position: absolute;
+            right: 76%;
+        }
+
+        .empty h1 {
+            font-size: 10px;
+            font-weight: normal;
+        }
+
+        .empty>h2 {
+            position: absolute;
+            margin-top: 200px;
+            right: 75%;
+            font-size: 30px;
+        }
+
+        .empty>p {
+            position: absolute;
+            margin-top: 240px;
+            right: 71%;
+        }
+
+        .txtCart {
+            color: rgb(199, 191, 191);
+            font-size: 1rem;
+        }
+
+
+    }
+
+    @media (max-width: 1200px) {
+
+        .container-card {
+            margin-left: 120px;
+            margin-top: 100px;
+
+        }
+
+        /* cart */
+        .cartContainer {
+            background-color: #fff;
+            box-shadow: -1px 7px -20px 0px #888;
+            position: fixed;
+            margin-top: 70px;
+            margin-left: 10px;
+            width: 100%;
+            height: 100%;
+        }
+
+
+        .empty img {
+            position: absolute;
+            right: 76%;
+        }
+
+        .empty h1 {
+            font-size: 10px;
+            font-weight: normal;
+        }
+
+        .empty>h2 {
+            position: absolute;
+            margin-top: 200px;
+            right: 75%;
+            font-size: 30px;
+        }
+
+        .empty>p {
+            position: absolute;
+            margin-top: 240px;
+            right: 71%;
+        }
+
+        .txtCart {
+            color: rgb(199, 191, 191);
+            font-size: 1rem;
+        }
+
+
+    }
 </style>

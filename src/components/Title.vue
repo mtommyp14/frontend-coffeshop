@@ -9,8 +9,8 @@
 
                         <div class="searchide" v-if="!isHidden">
                             <div class="range">
-                                <input type="text" v-model="max">
-                                <input type="range" min="0" max="100" v-model="max">
+                                
+                                <input type="range" style="width: 260px; margin-right:90px " min="0" max="100" v-model="max">
                             </div>
                             <div class="input-group mb-0">
                                 <input type="text" class="form-control" placeholder="Find" aria-label="Find"
@@ -184,8 +184,7 @@
 
 
         .cartItems {
-            width: 100%;
-        }
+            width: 100%;        }
 
         .cartItems h1 {
             margin: auto;
@@ -248,9 +247,58 @@
             width: 100%;
             height: 70px;
             margin-left: 0px;
-            padding-left: 80px;
+            padding-left: 70px;
             position: fixed;
             z-index: 999;
+        }
+        
+
+        .foodItems {
+            box-shadow: -1px 7px -20px 6px #888;
+        }
+
+        .header .searchIcon {
+            margin-right: 90px;
+            height: 25px;
+        }
+
+        .foodItems h1 {
+            text-align: center;
+            font-size: 25px;
+        }
+
+        .cartItems h1 {
+            margin: auto;
+            font-size: 25px;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .header {
+            width: 100%;
+            height: 100px;
+            margin-left: 0px;
+            padding-left: 70px;
+            position: fixed;
+            z-index: 999;
+        }
+         .foodItems {
+            box-shadow: -1px 7px -20px 6px #888;
+        }
+
+        .header .searchIcon {
+            margin-right: 90px;
+            height: 25px;
+        }
+
+        .foodItems h1 {
+            text-align: center;
+            font-size: 25px;
+        }
+
+        .cartItems h1 {
+            margin: auto;
+            font-size: 25px;
         }
     }
 </style>
