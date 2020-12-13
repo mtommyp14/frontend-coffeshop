@@ -20,18 +20,23 @@
                         <div class="cartfill" v-show="!isHidden">
 
                             <div class="cartfilltwo">
-                                <div v-for="cartright in cart" :key="cartright.id">
+                                <div class="testcart d-flex flex-wrap" v-for="cartright in cart" :key="cartright.id">
                                     <div class="cartright ">
-                                        <img class="card float-left shadow" :alt="{name}">
-                                        <h1 class="ml-2 pt-2">{{cartright.name}}</h1>
-                                        <div class="btn-group me-2 " role="group" aria-label="First group">
-                                            <button type="button" class="btn btn-primary">+</button>
-                                            <button type="button" class="btn btn-light disabled">0</button>
-                                            <button type="button" class="btn btn-warning"
-                                                @click="clickCard()">-</button>
+                                        <img class="card float-left shadow" :src="cartright.image" :alt="cartright">
+                                        <h1 class="ml-2 pt-2 float-left mr-2 ml-3">{{cartright.name}}</h1>
+                                        <div>
+                                            <div class="btn-group me-2" role="group" aria-label="First group">
+                                                <button type="button" class="btn btn-primary ">+</button>
+                                                <button type="button" class="btn btn-light disabled">0</button>
+                                                <button type="button" class="btn btn-warning" @click="clickCard()">-</button>
+                                                <div>
+                                                    <button class="btn btn-danger buttonclose "  @click="clickDelete(cartright.id)"> X</button>
+                                                </div>
+
+                                            </div>
+
+
                                         </div>
-                                        <button class="btn btn-danger float-right" @click="clickDelete(cartright.id)"> X
-                                        </button>
                                     </div>
                                 </div>
 
@@ -199,7 +204,6 @@
 
     .containerTotalBuy {
         margin-top: 540px;
-        padding-left: 0px;
 
     }
 
@@ -208,9 +212,28 @@
         margin-top: 90px;
     }
 
-    .cartfilltwo .cartright {
-        margin-left: 0;
+    .cartright {
+        margin: 0 20px 0 20px;
     }
+
+    .cartright h1 {
+        padding-right: 0;
+    }
+
+    .buttonclose {
+        
+        margin-left: 200px;
+        position: absoluteS;
+        margin: -0px 0 0 30px;
+
+    }
+
+    .testcart{
+        width: 100%;
+    }
+
+
+
 
 
     @media (max-width: 576px) {
@@ -239,8 +262,7 @@
             margin-top: 100px;
         }
 
-        cart 
-        .cartContainer {
+        cart .cartContainer {
             box-shadow: -1px 7px -20px 0px #888;
             position: fixed;
             margin-top: 100px;
@@ -280,7 +302,7 @@
 
     }
 
-    
+
     @media (max-width: 992px) {
 
         .container-card {
@@ -331,14 +353,14 @@
 
     }
 
-    
 
 
-    @media (min-width: 1200px) {
+    @media (max-width: 1200px) {
 
         .container-card {
-            margin-left: 80px;
+            margin-left: 120px;
             margin-top: 100px;
+
         }
 
         /* cart */
@@ -347,7 +369,7 @@
             box-shadow: -1px 7px -20px 0px #888;
             position: fixed;
             margin-top: 70px;
-            margin-left: 10px;
+            margin-left: 85px;
             width: 100%;
             height: 100%;
         }
@@ -384,12 +406,11 @@
 
     }
 
-    @media (max-width: 1200px) {
+    @media (min-width: 1200px) {
 
         .container-card {
-            margin-left: 120px;
+            margin-left: 160px;
             margin-top: 100px;
-
         }
 
         /* cart */
@@ -397,8 +418,9 @@
             background-color: #fff;
             box-shadow: -1px 7px -20px 0px #888;
             position: fixed;
-            margin-top: 70px;
+            margin-top: 100px;
             margin-left: 10px;
+            padding-top: 10px;
             width: 100%;
             height: 100%;
         }
@@ -406,7 +428,7 @@
 
         .empty img {
             position: absolute;
-            right: 76%;
+            right: 80%;
         }
 
         .empty h1 {
@@ -417,14 +439,14 @@
         .empty>h2 {
             position: absolute;
             margin-top: 200px;
-            right: 75%;
+            right: 79%;
             font-size: 30px;
         }
 
         .empty>p {
             position: absolute;
             margin-top: 240px;
-            right: 71%;
+            right: 78%;
         }
 
         .txtCart {
