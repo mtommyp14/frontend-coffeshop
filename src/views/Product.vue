@@ -1,10 +1,25 @@
 <template>
     <div class="product">
         <Navbar />
-        <Title :cartTot="cartTotal.cartTot" />
+        <Title :cartTot="cart.length" v-on:found="serach"/>
         <div class="container-fluid">
             <div class="row mainContainer">
                 <div class="col-md-8 cardcon">
+                    <!-- <div class="sortsearch">
+                            <div class="range">
+                                <input type="range" style="width: 260px; margin-right:90px " min="0" max="100" v-model="max">
+                            </div>
+                            
+                            <div class="input-group mb-0">
+                                
+                                <input type="text" class="form-control" placeholder="Find" aria-label="Find" aria-describedby="button-addon2">
+                                
+                                <button class="btn btn-outline-secondary ml-2 float-right" type="button"
+                                    id="button-addon2">Search</button>
+
+                            </div>
+                    </div> -->
+
                     <div class="cardContainer">
                         <div class="container-card d-flex flex-wrap">
                             <div class="pl-3" v-for="card in datas" :key="card.id" @click="clickCard(card)">
@@ -17,20 +32,25 @@
                 <div class="col-6 col-md-4 cartcol">
                     <div class="cartContainer">
 
-                        <div class="cartfill" v-show="!isHidden">
+
+                        <div class="cartfill" v-if="cart.length>=0">
 
                             <div class="cartfilltwo">
-                                <div class="testcart d-flex flex-wrap" v-for="cartright in cart" :key="cartright.id">
+                                <div class="testcart d-flex flex-wrap" v-for="(cartright, index) in cart"
+                                    :key="cartright.id">
                                     <div class="cartright ">
                                         <img class="card float-left shadow" :src="cartright.image" :alt="cartright">
                                         <h1 class="ml-2 pt-2 float-left mr-2 ml-3">{{cartright.name}}</h1>
                                         <div>
                                             <div class="btn-group me-2" role="group" aria-label="First group">
-                                                <button type="button" class="btn btn-primary ">+</button>
-                                                <button type="button" class="btn btn-light disabled">0</button>
-                                                <button type="button" class="btn btn-warning" @click="clickCard()">-</button>
+                                                <button type="button" class="btn btn-primary"
+                                                    v-on:click="addFood()">+</button>
+                                                <button type="button" class="btn btn-light disabled">{{add}}</button>
+                                                <button type="button" class="btn btn-warning"
+                                                    @click="clickCard()">-</button>
                                                 <div>
-                                                    <button class="btn btn-danger buttonclose "  @click="clickDelete(cartright.id)"> X</button>
+                                                    <button class="btn btn-danger buttonclose "
+                                                        v-on:click="cart.splice(index,1)"> X</button>
                                                 </div>
 
                                             </div>
@@ -39,21 +59,57 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="containerTotalBuy ">
                                     <h4 class="float-right">Price</h4>
                                     <h4 class="float-left">Total</h4>
                                     <p class="pt-5">*Harga Belum Termasuk PPN</p>
 
-                                    <button class="btn btn-success col-md-12">Checkout</button>
-                                    <button class="btn btn-outline-danger col-md-12 mt-2">Cancel</button>
+                                    <div>
+                                        <b-button id="show-btn" variant="success"
+                                            @click="$bvModal.show('bv-modal-example')">Checkout</b-button>
+
+                                        <b-modal id="bv-modal-example" hide-footer>
+                                            <template #modal-title>
+                                                ADD ITEMS
+                                            </template>
+                                            <div class="d-block text-center">
+                                                <!-- <b-form @submit="onSubmit">
+                                                    <b-form-group label="Name:" label-for="name">
+                                                        <b-form-input v-model="history.cashier" type="name" required
+                                                            placeholder="Product Name">
+                                                        </b-form-input>
+                                                    </b-form-group>
+
+                                                    <b-form-group label="Price:" label-for="price">
+                                                        <b-form-input v-model="form.price" required
+                                                            placeholder="Enter Price"></b-form-input>
+                                                    </b-form-group>
+
+                                                    <b-form-group label="Image:" label-for="image">
+                                                        <b-form-input v-model="form.image" required
+                                                            placeholder="Enter Image"></b-form-input>
+                                                    </b-form-group>
+                                                    <b-form-group label="Category:" label-for="idcategory">
+                                                        <b-form-select v-model="form.idcategory" :options="category">
+                                                        </b-form-select>
+                                                    </b-form-group>
+
+
+
+                                                    <b-button type="submit" variant="primary">Submit</b-button>
+                                                    <b-button class="ml-2" type="reset" variant="danger">Reset
+                                                    </b-button>
+                                                </b-form> -->
+                                            </div>
+                                            <b-button class="mt-3" block @click="$bvModal.hide('bv-modal-example')">
+                                                Close Me</b-button>
+                                        </b-modal>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
-
-                        <div class="empty" v-show="isHidden">
-
-
+                        <div class="empty" v-else>
                             <img class="imgCup" src="../assets/food-and-restaurant.png" alt="">
                             <h2>You cart is empty</h2>
                             <p class="txtCart">Please add some items from menu</p>
@@ -86,12 +142,8 @@
             return {
                 datas: 'null',
                 sort: 10000,
-                isHidden: true,
                 cart: [],
-                cartright: [],
-                cartTotal: [],
-
-
+                add: 1,
             }
         },
         components: {
@@ -102,21 +154,28 @@
         },
 
         methods: {
-            erese() {
-                this.isHidden = !this.isHidden
-            },
             clickCard(value) {
-                this.erese()
                 this.cart.push(value)
-
             },
-            clickDelete(cartright) {
-                this.cartright.splice(cartright, 1)
+            addFood() {
+                this.add++
             },
-
-
+            serach(value){
+                axios.get(process.env.VUE_APP_URL + 'product/search/?search=' + value)
+                .then(res => {
+                    if(res.data.result== 'tidak ada data di table product'){
+                    this.datas=[]
+                    }else{
+                        this.datas = res.data.result
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            }
 
         },
+
         mounted() {
             axios.get(process.env.VUE_APP_URL + 'product')
                 .then(res => {
@@ -126,11 +185,21 @@
                     console.log(err);
                 })
         }
+
     }
 </script>
 
 
 <style scoped>
+
+    /* .sortsearch{
+        position: absolute;
+        margin: 800px 110px 300px;
+        height: 200px;
+        width: 200px;
+        z-index: 8;
+    } */
+
     .mainContainer {
 
         display: flex;
@@ -221,14 +290,14 @@
     }
 
     .buttonclose {
-        
+
         margin-left: 200px;
         position: absoluteS;
         margin: -0px 0 0 30px;
 
     }
 
-    .testcart{
+    .testcart {
         width: 100%;
     }
 

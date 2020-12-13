@@ -8,16 +8,14 @@
 
 
                         <div class="searchide" v-if="!isHidden">
+                           
                             <div class="range">
-                                
                                 <input type="range" style="width: 260px; margin-right:90px " min="0" max="100" v-model="max">
                             </div>
+                            
                             <div class="input-group mb-0">
                                 
-                                <input type="text" class="form-control" placeholder="Find" aria-label="Find" aria-describedby="button-addon2">
-                                
-                                <button class="btn btn-outline-secondary ml-2" type="button"
-                                    id="button-addon2">Search</button>
+                                <input type="search" class="form-control" placeholder="Find" aria-label="Find" aria-describedby="button-addon2" v-model="find" v-on:keyup="sendtoparent" >
 
                             </div>
                         </div>
@@ -42,17 +40,20 @@
         data() {
             return {
                 isHidden: true,
-
-
-
+                find: '',
             }
         },
         props: {
             cartTot: {
-                type: String,
+                type: Number,
                 required: true,
             },
 
+        },
+        methods: {
+            sendtoparent(){
+                this.$emit("found", this.find);
+            }
         }
 
     }
@@ -295,12 +296,12 @@
 
         .foodItems h1 {
             text-align: center;
-            font-size: 25px;
+            font-size: 40px;
         }
 
         .cartItems h1 {
             margin: auto;
-            font-size: 25px;
+            font-size: 40px;
         }
     }
 </style>
