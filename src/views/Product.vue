@@ -131,13 +131,7 @@
         
         idInvoice: 0,
         ppn: 0,
-        payment: [{
-          text: "Cash",
-          value: 1
-        }, {
-          text: "Debit",
-          value: 2
-        }],
+        
 
 
 

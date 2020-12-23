@@ -9,8 +9,10 @@
 
 
         <p class="pt-4"> Please Login first.</p>
-
+         <router-link to="/product"><button>Product SKIPS </button> </router-link>
+        
         <b-button variant="primary" href="#" v-b-modal.modal-1>Login</b-button>
+        
 
         <b-modal id="modal-1" title="Please Login First Buddy" hide-footer>
           <b-tabs content-class="mt-3">
