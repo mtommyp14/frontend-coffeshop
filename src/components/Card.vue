@@ -1,15 +1,12 @@
 <template>
-    <div>
-        <div class="card cardContainer" style="width: 18rem;">
-            <img :src="image" class="card-img-top" :alt="name">
-            <div class="card-body">
-                <p class="card-text">{{name}}</p>
-                <p>{{price}}</p>
-                <p class="text-primary">{{type}}</p>
-
-            </div>
-        </div>
+   <div class="card card-menu">
+    <img :src="image" class="card-img-top" />
+    <div class="card-body pl-0">
+      <h5 class="card-title font-weight-bold mb-0">{{ name }}</h5>
+      <p class="card-text font-weight-bold">Rp. {{ price }}</p>
+      <p>{{type}}</p>
     </div>
+  </div>
 </template>
 
 <script>
@@ -18,19 +15,19 @@
         props: {
             image: {
                 type: String,
-                required: true,
+                default: undefined
             },
             name: {
                 type: String,
-                required: true,
+                default: undefined
             },
             price: {
                 type: String,
-                required: true,
+                default: undefined
             },
             type: {
                 type: String,
-                required: true,
+                default: undefined
             }
         }
 

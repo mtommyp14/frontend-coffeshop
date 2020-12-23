@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import History from '../views/History.vue'
 import Product from '../views/Product.vue'
+import Settings from '../views/Settings.vue'
 
 Vue.use(VueRouter)
 
@@ -22,6 +23,11 @@ const routes = [
     path: '/product',
     name: 'product',
     component: Product
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: Settings
   },
   
 ]

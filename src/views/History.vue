@@ -1,71 +1,89 @@
 <template>
   <div class="history">
-    <Navbar />
-    <header>
-      <div class="continer-fluid">
-        <div class="header justify-content-around">
-          <h1>History</h1>
+    <div class="row">
+      <Navbar />
+      <div class="col-11 col-sm-11 col-md-11 col-lg-11 col-xl-11 px-0">
+        <header>
+          <div class="">
+            <div class="header ">
+              <h1>History</h1>
+            </div>
+          </div>
+        </header>
+        <div class="cardm col-12 mt-3">
+          <div class="row">
+            <div class="cardContainer col-md-4 col-sm-12">
+              <div class="card card-body">
+                <h5 class="card-title">Today's Income</h5>
+                <h4 class="card-subtitle mb-2">Rp.1.000.000</h4>
+                <h5 class="card-title">+2% Yesterday</h5>
+              </div>
+            </div>
+            <div class="cardContainer col-md-4 col-sm-12">
+              <div class="card card-body">
+                <h5 class="card-title">Orders</h5>
+                <h4 class="card-subtitle mb-2">3.270</h4>
+                <h5 class="card-title">+5% Last Week</h5>
+              </div>
+            </div>
+            <div class="cardContainer col-md-4 col-sm-12">
+              <div class="card card-body">
+                <h5 class="card-title">This year Income</h5>
+                <h4 class="card-subtitle mb-2">Rp.10.0000.000</h4>
+                <h5 class="card-title">+10% Last Year</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <h1 class="pt-5  empty mt-3 text">Sorry we are not ready</h1>
+        </div>
+        <div class="tableo mt-3 mx-3">
+          <table class="table ">
+            <thead>
+              <tr>
+                <th scope="col">Invoice</th>
+                <th scope="col">Food name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Cashier</th>
+                <th scope="col">PPN</th>
+                <th scope="col">Total Price</th>
+                <th scope="col">Date</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="history in dataHistory" :key="history.id">
+                <th scope="row">{{history.id_history}}</th>
+                <td>{{history.name}}</td>
+                <td>{{history.price}}</td>
+                <td>{{history.cashier}}</td>
+                <td>{{history.ppn}}</td>
+                <td>{{history.totalprice}}</td>
+                <td>{{history.date}}</td>
+                <td>
+                  <b-button v-b-modal.modal-update variant="primary mr-2">
+                    <b-icon icon="gear"></b-icon>
+                  </b-button>
+                  <b-button v-b-modal.modal-delete variant="danger">
+                    <b-icon icon="trash"></b-icon>
+                  </b-button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
         </div>
       </div>
-    </header>
-    <div class="container-fluid cardm">
-      <div class="d-flex cardall">
-        <div class="card" style="width: 30rem; background-color: #FFC0CB;">
-          <div class="card-body">
-            <h5 class="card-title">Today's Income</h5>
-            <h4 class="card-subtitle mb-2">Rp.1.000.000</h4>
-            <h5 class="card-title">+2% Yesterday</h5>
-          </div>
-        </div>
-
-        <div class="card" style="width: 30rem; background-color: #AFEEEE;">
-          <div class="card-body">
-            <h5 class="card-title">Orders</h5>
-            <h4 class="card-subtitle mb-2">3.270</h4>
-            <h5 class="card-title">+5% Last Week</h5>
-          </div>
-        </div>
-        <div class="card" style="width: 30rem; background-color: #DA70D6;">
-          <div class="card-body">
-            <h5 class="card-title">This year Income</h5>
-            <h4 class="card-subtitle mb-2">Rp.10.0000.000</h4>
-            <h5 class="card-title">+10% Last Year</h5>
-          </div>
-        </div>
+      <div>
+        <b-modal id="modal-update" title="Update">
+          <p class="my-4">Update </p>
+        </b-modal>
+        <b-modal id="modal-delete" title="Are you sure want to delete this data?">
+          <p class="my-4">Are you sure want to delete this data?</p>
+        </b-modal>
       </div>
     </div>
-    <div class="container-fluid empty">
-      <h1 class="pt-5">Sorry we are not ready</h1>
-    </div>
-    <div class="tableo">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Invoice</th>
-            <th scope="col">Food name</th>
-            <th scope="col">Price</th>
-            <th scope="col">Cashier</th>
-            <th scope="col">PPN</th>
-            <th scope="col">Total Price</th>
-            <th scope="col">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="history in dataHistory" :key="history.id">
-            <th scope="row">{{history.id_history}}</th>
-            <td>{{history.name}}</td>
-            <td>{{history.price}}</td>
-            <td>{{history.cashier}}</td>
-            <td>{{history.ppn}}</td>
-            <td>{{history.totalprice}}</td>
-            <td>{{history.date}}</td>
-          </tr>
-
-        </tbody>
-      </table>
-    </div>
-
-
   </div>
 </template>
 
@@ -79,73 +97,45 @@
     },
     name: "History",
     data() {
-            return {
-                dataHistory: '',
-            }
-        },
+      return {
+        dataHistory: '',
+      }
+    },
     mounted() {
-            axios.get('http://localhost:9000/history')
-                .then(res => {
-                    this.dataHistory = res.data.result
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-        }
+      axios.get(process.env.VUE_APP_URL + 'history')
+        .then(res => {
+          this.dataHistory = res.data.result
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
 
   }
 </script>
 
 
 <style scoped>
+  .Navbar {
+    background-color: white;
+  }
+
   .header {
-    width: 100%;
-    height: 100px;
-    display: flex;
-    margin-left: 100px;
-    position: fixed;
     z-index: 999;
     background-color: white;
     align-items: center;
-  }
-
-  .header h1 {
-    margin-left: -150px;
-  }
-
-  .cardm {
-    position: absolute;
-    margin: 110px 0 0 0;
-  }
-
-  .cardall {
-    margin-left: 200px;
-  }
-
-  .card {
-    margin-left: 30px;
-    height: 180px;
-    text-align: center;
+    height: 100px;
     padding-top: 20px;
   }
 
-
-
-  .empty {
-    position: absolute;
-    margin: 300px 0 0 245px;
-    background-color: whitesmoke;
-    height: 400px;
-    width: 1500px;
-
+  .empty{
+    background-color: white;
+    height: 250px;
   }
 
-
   .tableo {
-    position: absolute;
-    margin: 720px 0 0 245px;
-    width: 1500px;
-    background-color: whitesmoke;
+
+    background-color: white;
     margin-bottom: 10px;
   }
 </style>
