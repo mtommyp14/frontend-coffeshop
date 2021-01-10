@@ -39,7 +39,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 8. "vuex": "^3.6.0",
 9. "vuex-persistedstate": "^4.0.0-beta.2"
 
-
 ## Database use:
 1. user
 2. products
