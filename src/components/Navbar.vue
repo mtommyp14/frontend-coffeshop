@@ -1,134 +1,50 @@
 <template>
     <div class="col-sm-1 col-md-1 col-lg-1 px-0 bg-white">
+        
         <nav>
-            <ul>
-                <li>
-                    <img class="menu" src="../assets/menu.png" alt="">
-                </li>
-                <li>
-                    <router-link to="/product"> <img src="../assets/fork.png" alt=""> </router-link>
-                </li>
-                <li>
-                    <router-link to="/history"><img src="../assets/clipboard.png" alt=""> </router-link>
-                </li>
-                <li>
-                    <img v-on:click="hideaddproduct = !hideaddproduct" v-b-modal.modal-1 src="../assets/add.png" alt="">
-                </li>
-                <li>
-                    <router-link to="/settings">
-                        <b-icon-gear font-scale="3" class="mt-4" variant="secondary"></b-icon-gear>
-                    </router-link>
-                </li>
-            </ul>
-        </nav>
-        <div v-if="!hideaddproduct" class="toogle-nav-additems">
-            <div class="form-nav text-left">
-                <div>
-                   
-                    <b-modal id="modal-1" hide-footer title="BootstrapVue">
-                        <b-form @submit="onSubmit" @reset="onReset">
-                            <b-form-group label="Name:" label-for="name">
-                                <b-form-input v-model="form.name" type="name" required placeholder="Product Name">
-                                </b-form-input>
-                            </b-form-group>
+                <ul>
+                    <li>
+                        <img class="menu mt-4 bg-white imagemenu" src="../assets/menu.png" >
+                    </li>
+                    <li>
+                        <router-link to="/product" v-b-popover.hover.top="'Product'"> <img src="../assets/fork.png" alt=""> </router-link>
+                    </li>
+                    <li>
+                        <router-link to="/history" v-b-popover.hover.top="'History Payment'"><img src="../assets/clipboard.png" alt=""> </router-link>
+                    </li>
+                    
+                    
+                    <li>
+                        <router-link to="/settings" v-b-popover.hover.top="'Setting'">
+                            <b-icon-gear font-scale="3" class="mt-5" variant="secondary"></b-icon-gear>
+                        </router-link>
+                    </li>
 
-                            <b-form-group label="Price:" label-for="price">
-                                <b-form-input v-model="form.price" required placeholder="Enter Price"></b-form-input>
-                            </b-form-group>
+                    <li>
+                        <button v-b-popover.hover.top="'Exit'" @click="logout"><b-icon-door-open-fill font-scale="3" class="mt-5" variant="secondary"></b-icon-door-open-fill></button>
+                    </li>
+                </ul>
+            </nav>
 
-                            <b-form-group label="Image:" label-for="image">
-                                <b-form-input v-model="form.image" required placeholder="Enter Image"></b-form-input>
-                            </b-form-group>
-                            <b-form-group label="Category:" label-for="idcategory">
-                                <b-form-select v-model="form.idcategory" :options="category">
-                                </b-form-select>
-                            </b-form-group>
-
-                            <b-button type="submit" variant="primary">Submit</b-button>
-                            <b-button class="ml-2" type="reset" variant="danger">Reset</b-button>
-                        </b-form>
-                    </b-modal>
-                </div>
-
-
-            </div>
-        </div>
     </div>
 </template>
 
 <script>
-    import axios from 'axios';
 
     export default {
         name: "Navbar",
         data() {
             return {
                 hideaddproduct: true,
-                form: {
-                    name: '',
-                    price: '',
-                    image: '',
-                    idcategory: null,
-                },
-                category: [{
-                    text: "Makanan",
-                    value: 1
-                }, {
-                    text: "Minuman",
-                    value: 2
-                }]
-
             }
         },
-        methods: {
-            onSubmit() {
-                const dataProduct = {
-                    name: this.form.name,
-                    price: this.form.price,
-                    image: this.form.image,
-                    idcategory: this.form.idcategory
-                }
-                axios({
-                        method: 'post',
-                        url: 'http://localhost:9000/product',
-                        headers: {
-                            "Content-type": "application/json"
-                        },
-                        data: dataProduct
-                    })
-                    .then(res => {
-                        console.log(res.data)
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-
-
+        methods:{
+            logout(){
+                this.$store.dispatch('logout').then(()=>{
+                    this.$router.push('/')
+                })
             },
-            onReset(evt) {
-                evt.preventDefault()
-                // Reset our form values
-                this.form.name = ''
-                this.form.price = ''
-                this.form.image = ''
-                this.form.idcategory = ''
 
-                // Trick to reset/clear native browser form validation state
-                this.show = false
-                this.$nextTick(() => {
-                    this.show = true
-                })
-            }
-        },
-
-        mounted() {
-            axios.post(process.env.VUE_APP_URL + 'product')
-                .then(res => {
-                    this.datas = res.data.result
-                })
-                .catch(err => {
-                    console.log(err);
-                })
         }
     }
 </script>
@@ -171,6 +87,8 @@
         margin-left: 200px;
 
     }
+
+   
 
     /* 
     .form-nav {

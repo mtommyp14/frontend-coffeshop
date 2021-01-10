@@ -42,9 +42,9 @@
           <table class="table ">
             <thead>
               <tr>
+                <th scope="col">Id</th>
                 <th scope="col">Invoice</th>
-                <th scope="col">Food name</th>
-                <th scope="col">Price</th>
+                <th scope="col">Name</th>
                 <th scope="col">Cashier</th>
                 <th scope="col">PPN</th>
                 <th scope="col">Total Price</th>
@@ -55,8 +55,8 @@
             <tbody>
               <tr v-for="history in dataHistory" :key="history.id">
                 <th scope="row">{{history.id_history}}</th>
-                <td>{{history.name}}</td>
-                <td>{{history.price}}</td>
+                <td>{{history.invoice}}</td>
+                <td>{{history.namehis}}</td>
                 <td>{{history.cashier}}</td>
                 <td>{{history.ppn}}</td>
                 <td>{{history.totalprice}}</td>
@@ -89,7 +89,7 @@
 
 <script scoped>
   import Navbar from '../components/Navbar.vue'
-  import axios from 'axios';
+  import Axios from 'axios';
 
   export default {
     components: {
@@ -102,7 +102,7 @@
       }
     },
     mounted() {
-      axios.get(process.env.VUE_APP_URL + 'history')
+      Axios.get('history')
         .then(res => {
           this.dataHistory = res.data.result
         })
@@ -130,11 +130,11 @@
 
   .empty{
     background-color: white;
-    height: 250px;
+    height: 280px;
   }
 
   .tableo {
-
+    height: 38vh;
     background-color: white;
     margin-bottom: 10px;
   }

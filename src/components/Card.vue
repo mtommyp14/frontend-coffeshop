@@ -15,19 +15,19 @@
         props: {
             image: {
                 type: String,
-                default: undefined
+                require: true
             },
             name: {
                 type: String,
-                default: undefined
+                require: true
             },
             price: {
-                type: String,
-                default: undefined
+                type: Number,
+                require: true
             },
             type: {
                 type: String,
-                default: undefined
+                require: true
             }
         }
 

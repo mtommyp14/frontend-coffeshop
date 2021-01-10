@@ -1,4 +1,7 @@
-# vuefrontend
+![Apps](./src/assets/a.png)
+
+
+# Vuefrontend 
 
 ## Project setup
 ```
@@ -22,4 +25,5 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
 # frontvuecoffeshop

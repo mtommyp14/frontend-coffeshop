@@ -10,6 +10,7 @@
           <div class="row mainContainer">
             <div class="px-0 col-sm-8 col-md-8 col-lg-8 cardcon ">
               <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mt-3 mx-1">
+                
                 <div class="col mb-4 menu" v-for="cards in datas" :key="cards.id" @click="clickCard(cards)">
                   <Card :name="cards.name" :price="Number(cards.price)" :image="cards.image" :type="cards.type" />
                 </div>
@@ -24,7 +25,7 @@
                   <p class="txtCart">Please add some items from menu</p>
                 </div>
                 <div class="cartfill" v-else>
-                  <div class="container col" v-for="(cartright, index) in cart" :key="cartright.id">
+                  <div class="container col" v-for="(cartright, index) in cart" :key="generateKey(cartright.id, cartright.count)">
                     <div class="row">
                       <div class="cart_image col-4 mt-5">
                         <img :src="cartright.image" class="img-fluid cart_images">
@@ -38,9 +39,9 @@
                         <div class="cart_price" :key="cartright.id">
                           <div class="row">
                             <div class="col-6 value-cart form-group row">
-                              <button class="btn btn-danger minbutton"> - </button>
-                              <input type="number" class="inputcart" />
-                              <button class="btn btn-success plusbutton"> + </button>
+                              <button class="btn btn-danger minbutton" @click="changeqty(cartright.id, 'MIN')"> - </button>
+                              <input type="number" class="inputcart" :value="cartright.count"/>  
+                              <button class="btn btn-success plusbutton" @click="changeqty(cartright.id, 'PLUS')">   + </button>
                             </div>
                             <div class="col-6 text-right pt-2">
                               <p>Rp. {{cartright.price}}</p>
@@ -65,7 +66,7 @@
               </div>
             </div>
 
-            <b-modal id="modal-1" title="Checkout">
+            <b-modal id="modal-1" title="Checkout" hide-footer>
               <table class="table table-borderless">
                 <tbody>
                   <tr>
@@ -94,13 +95,11 @@
                       <b-form-select id="input-3" :options="payment" required></b-form-select>
                     </td>
                   </tr>
-
                 </tbody>
               </table>
+             
+              <button class="btn btn-block btn-primary checkoutbtn" @click="paymentCheckout()">Pay</button>
             </b-modal>
-
-
-
           </div>
         </main>
 
@@ -128,13 +127,19 @@
         cart: [],
         add: 1,
 
-        
+
         idInvoice: 0,
         ppn: 0,
-        
+        payment: [{ text: "Cash",value: 1}, {text: "Debit",value: 2}],
 
+        formCheckout:{
+          
+          
+          cashier: 'Pevita',
+          ppn: null,
+          totalprice: null,
 
-
+        } 
       };
 
     },
@@ -151,6 +156,8 @@
       addFood() {
         this.add++;
       },
+
+
       serach(value) {
         axios
           .get(process.env.VUE_APP_URL + "product/search/?search=" + value)
@@ -165,10 +172,65 @@
             console.log(err);
           });
       },
+
+      changeqty(id, mode){
+        let result = this.cart.find((res)=>{
+          if(res.id == id){
+            return res.id
+          }
+
+        })
+        if(result){
+          for(let i = 0; i < this.cart.length; i++){
+            if( this.cart[i].id == id ){
+              const cartObject = {
+                ...this.cart[i],
+                count: mode === 'PLUS' ? this.cart[i].count + 1 : this.cart[i].count - 1,
+              }
+              console.log("Masuk");
+
+              this.$set(this.cart, i, cartObject)
+            }
+
+          }
+        }
+      },
+
+      generateKey(key1, key2){
+        return `${key1}-${key2}`
+      },
+
+
+
       checkoutPayment() {
         this.idInvoice = Math.round(Math.random() * 10000 + 1)
         this.ppn = this.totalprice * (10 / 100)
+      },
+
+      
+      paymentCheckout(){
+        
+        this.formCheckout.cashier = this.cashier
+        this.formCheckout.ppn = this.ppn
+        this.formCheckout.totalprice = this.calculate
+        axios({
+          method: "post",
+          url: process.env.VUE_APP_URL + "history",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: JSON.parse(JSON.stringify(this.formCheckout)),
+          
+        }) 
+        .then((res)=> {
+          console.log(res.data.result);
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
       }
+
+   
     },
 
     mounted() {
@@ -240,5 +302,9 @@
 
   .inputcart {
     width: 50px;
+  }
+
+  .checkoutbtn {
+    width: 460px;
   }
 </style>
