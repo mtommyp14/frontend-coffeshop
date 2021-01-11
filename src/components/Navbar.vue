@@ -20,8 +20,9 @@
                         </router-link>
                     </li>
 
-                    <li>
-                        <button v-b-popover.hover.top="'Exit'" @click="logout"><b-icon-door-open-fill font-scale="3" class="mt-5" variant="secondary"></b-icon-door-open-fill></button>
+                    <li>    
+                        <b-icon-door-open-fill font-scale="3" class="mt-5" variant="secondary" v-b-popover.hover.top="'Exit'" @click="logout"></b-icon-door-open-fill>
+                        
                     </li>
                 </ul>
             </nav>

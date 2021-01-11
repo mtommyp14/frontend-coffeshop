@@ -15,6 +15,10 @@ const isAuth = (to, from, next) => {
   }
 }
 
+// const isStay = (to, from, next) => {
+
+// }
+
 const isOut = (to, from, next) => {
   if (store.getters["getOut"]) {
     next('/')

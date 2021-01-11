@@ -20,7 +20,7 @@
                 <b-button @click="editProduct(data.item)" v-b-modal.modal-updateproduct variant="primary mr-2">
                   <b-icon icon="gear"></b-icon>
                 </b-button>
-                <b-button v-b-modal.modal-deleteproduct variant="danger">
+                <b-button v-b-modal.modal-deleteproduct variant="danger" @click="onDeleteProduct(data.item.id)">
                   <b-icon icon="trash"></b-icon>
                 </b-button>
               </template>
@@ -30,8 +30,6 @@
             </b-pagination>
           </div>
         </div>
-
-
         <div class="addprod">
           <b-modal id="modal-addproduct" hide-footer title="BootstrapVue">
             <b-form @submit="onSubmitAdd" @reset="onAddReset">
@@ -56,8 +54,6 @@
             </b-form>
           </b-modal>
         </div>
-
-
         <div class="editprod">
           <b-modal id="modal-updateproduct" title="Update Product" hide-footer>
             <b-form>
@@ -85,18 +81,34 @@
           </b-modal>
         </div>
 
-        <div class="delprod">
-          <b-modal id="modal-deleteproduct" title="Are you sure want to delete this data?">
-            <p class="my-4">Are you sure want to delete this data?</p>
-          </b-modal>
-        </div>
+        
 
 
 
         <div class="bottom mt-3 ml-3 row">
           <div class="user mt-1 col-5">
-
+            <div class="overflow-auto">
+              <h4 class="pt-2 pb-2 float-left">Table Category</h4>
+              <button class="btn btn-primary mt-2 float-right" v-b-modal.modal-addCategory>Add Category</button>
+              <b-table id="my-tableCategory" :fields="fieldsCategory" :items="setCategory" :per-page="perPageCategory"
+                :current-page="currentPageCategory" responsive="sm">
+                <template #cell(action)="dataCategory">
+                  <b-button @click="editCategory(dataCategory.item)" v-b-modal.modal-updateCategory variant="primary mr-2">
+                    <b-icon icon="gear"></b-icon>
+                  </b-button>
+                  <b-button v-b-modal.modal-deleteCategory variant="danger">
+                    <b-icon icon="trash"></b-icon>
+                  </b-button>
+                </template>
+              </b-table>
+              <b-pagination v-model="currentPageCategory" :total-rows="rowsCategory" :per-page="perPageCategory"
+                aria-controls="my-tableCategory" align="center">
+              </b-pagination>
+            </div>
           </div>
+
+
+
 
           <div class="category mt-1 col-6 ml-1">
             <div class="overflow-auto">
@@ -238,7 +250,7 @@
         perPageUser: 2,
         currentPageUser: 1,
         setUser: [],
-        fieldsUser: ['id_user', 'name', 'email', 'role','action'],
+        fieldsUser: ['id_user', 'name', 'email', 'role', 'action'],
 
         formSignup: {
           email: '',
@@ -252,12 +264,27 @@
 
 
 
+        perPageCategory: 2,
+        currentPageCategory: 1,
+        setCategory: [],
+        fieldsCategory: ['id_category', 'type', 'Action'],
+
+        formCategory: {
+          type: '',
+
+        },
+
+
+
+
+
       }
     },
 
     mounted() {
       this.getAllDataProduct()
       this.getAllDataUser()
+      this.getAllDataCategory()
     },
 
     computed: {
@@ -266,13 +293,32 @@
       },
       rowsUser() {
         return this.setUser.length
+      },
+      rowsCategory() {
+        return this.setCategory.length
       }
     },
 
     methods: {
+
+
+      onAddReset(evt) {
+        evt.preventDefault()
+        // Reset our form values
+        this.formadd.name = ''
+        this.formadd.price = ''
+        this.formadd.image = ''
+        this.formadd.idcategory = ''
+
+        // Trick to reset/clear native browser form validation state
+        this.show = false
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
+
+
       onSubmitAdd() {
-
-
         let formProduct = new FormData();
         formProduct.append("name", this.formadd.name)
         formProduct.append("image", this.formadd.image)
@@ -305,27 +351,26 @@
           .catch(err => {
             console.log(err);
           })
-      }
-
-
-      ,
-      onAddReset(evt) {
-        evt.preventDefault()
-        // Reset our form values
-        this.formadd.name = ''
-        this.formadd.price = ''
-        this.formadd.image = ''
-        this.formadd.idcategory = ''
-
-        // Trick to reset/clear native browser form validation state
-        this.show = false
-        this.$nextTick(() => {
-          this.show = true
-        })
       },
 
+      onDeleteProduct(id) {
+        console.log(id);
+        axios({
+            method: 'delete',
+            url: process.env.VUE_APP_URL + `product/${id}`,
+            headers: {
+              "authToken": this.$store.getters.getToken
+            }
+          })
+          .then(res => {
+            this.getAllDataProduct()
+            console.log(res.data)
+          })
+          .catch(err => {
+            console.log(err);
+          })
 
-
+      },
 
       editProduct(value) {
         this.formeditproduct.id = value.id
@@ -395,6 +440,8 @@
 
 
 
+
+
       getAllDataUser() {
         axios.get(process.env.VUE_APP_URL + 'users')
           .then(res => {
@@ -416,16 +463,31 @@
               "authToken": this.$store.getters.getToken
             },
             data: this.formSignup,
-          
+
           })
           .then((res) => {
-            
+
             this.response = JSON.parse(JSON.stringify(res))
+            this.$bvModal.hide("modal-addUser");
+            this.getAllDataUser()
           })
           .catch(err => {
             console.log(err);
           })
 
+      },
+
+
+
+
+      getAllDataCategory() {
+        axios.get(process.env.VUE_APP_URL + 'category')
+          .then(res => {
+            this.setCategory = res.data.result
+          })
+          .catch(err => {
+            console.log(err);
+          })
       },
 
 

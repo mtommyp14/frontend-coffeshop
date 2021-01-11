@@ -1,12 +1,13 @@
 <template>
-   <div class="card card-menu">
-    <img :src="image" class="card-img-top" />
-    <div class="card-body pl-0">
-      <h5 class="card-title font-weight-bold mb-0">{{ name }}</h5>
-      <p class="card-text font-weight-bold">Rp. {{ price }}</p>
-      <p>{{type}}</p>
+    <div class="card card-menu">
+        <img :src="image" class="card-img-top" />
+        <div class="card-body pl-0">
+            <h5 class="card-title font-weight-bold mb-0">{{ name }}</h5>
+            <button class="btn btn-primary float-right" @click="clickCard(prod)">Add</button>
+            <p class="card-text font-weight-bold">Rp. {{ price }}</p>
+            <p>{{type}}</p>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -28,7 +29,21 @@
             type: {
                 type: String,
                 require: true
+            },
+            prod:{
+                type: Object,
+                require: true
             }
+        },
+        data() {
+            return {
+                chart: []
+            }
+        },
+        methods: {
+            clickCard(value) {
+              this.$emit('addProd', value)
+            },
         }
 
     }
@@ -76,9 +91,15 @@
         font-weight: normal;
     }
 
+    .card-title {
+        margin: 10px;
+        text-align: left;
+    }
+
     .card p {
         font-size: medium;
-        margin: 10px 0;
+        margin: 10px;
+        text-align: left;
     }
 
 
