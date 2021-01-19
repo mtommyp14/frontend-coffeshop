@@ -2,13 +2,11 @@ import Axios from "axios"
 
 
 const state = {
-    
     user: null,
     isLoggedIn: false,
     authToken: null 
-
-    
 }
+
 const getters = {
     isLoggedIn(state){
         return state.isLoggedIn
@@ -32,7 +30,8 @@ const getters = {
     },
     getToken(state){
         return state.authToken
-    }
+    },
+   
     
     
     
@@ -42,15 +41,18 @@ const actions = {
         return new Promise((resolve, reject) => {
             Axios.post('auth', data)
             .then(res => {
-                if(res.data.result[0].msg== "Check Password Anda"){
+                if(res.data.result[0].msg == "Check Password Anda"){
                     reject(res.data.result[0].msg)
                 }
                 console.log(res.data);
                 resolve(res.data)
                 commit('setToken', res.data.result[0].token)
+
+                
             })
             .catch(err => {
                 reject(new Error(err))
+                
                 
             })
         })

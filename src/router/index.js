@@ -8,16 +8,12 @@ import PageNotFound from '../views/PageNotFound.vue'
 import store from '../store/index'
 
 const isAuth = (to, from, next) => {
-  if (store.getters["getIsAuth"]) {
+  if (store.getters["getIsAuth"] ) {
     next()
   } else {
     next('/')
   }
 }
-
-// const isStay = (to, from, next) => {
-
-// }
 
 const isOut = (to, from, next) => {
   if (store.getters["getOut"]) {
@@ -42,14 +38,15 @@ const routes = [
   {
     path: '/history',
     name: 'history',
-    component: History
+    component: History,
+    
   },
   {
     path: '/product',
     name: 'product',
     component: Product,
     beforeEnter: isAuth,
-    afterEnter: isOut
+    afterEnter: isOut,
   },
   {
     path: '/settings',
@@ -64,8 +61,9 @@ const routes = [
   
 ]
 
+
 const router = new VueRouter({
-  // mode: 'history',
+  mode: 'history',
   routes
 })
 

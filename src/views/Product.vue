@@ -5,7 +5,7 @@
 
       <div class="col-sm-11 col-md-11 col-lg-11 pl-0">
 
-        <Title :cartTot="cart.length" v-on:found="serach" />
+        <Title :cartTot="qty" v-on:found="serach" />
         <main class="col-sm-12 col-md-12 col-lg-12">
           <div class="row mainContainer">
             <div class="px-0 col-sm-8 col-md-8 col-lg-8 cardcon ">
@@ -33,8 +33,8 @@
                   <p class="txtCart">Please add some items from menu</p>
                 </div>
                 <div class="cartfill" v-else>
-                  <div class="container col" v-for="carts in cart" :key="carts.id">
-                    <Cart :name="carts.name" :image="carts.image" :price="carts.price" />
+                  <div class="container col">
+                    <Cart :addCart="addCartProduct" :addValue="qty"/>
                   </div>
                   <div class="cart-order">
                     <div class="order-total mt-5">
@@ -159,7 +159,7 @@
         let indexItem
         let isExist = this.cart.filter((cards, index)=>{
         console.log("masuk");
-          if(cards.prod.id == Number(prod.id)){
+          if(cards.product.id == prod.id){
             indexItem = index
             return true
           }else{
@@ -169,7 +169,7 @@
         if(isExist.length){
           this.cart[indexItem].qty++
         }else{
-          this.cart.push({prod :prod, qty: 1})
+          this.cart.push({product :prod, qty: 1})
         }
       }
 
@@ -249,6 +249,20 @@
     },
 
     computed: {
+      addCartProduct(){
+        return this.cart
+      },
+
+
+      qty(){
+        let qty = 0
+        for(const key in this.cart ){
+          qty = qty + this.cart[key].qty
+        }
+        return qty
+      }
+
+
       // totalprice() {
       //   let total = 0
       //   for (const res of this.cart) {

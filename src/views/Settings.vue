@@ -20,7 +20,7 @@
                 <b-button @click="editProduct(data.item)" v-b-modal.modal-updateproduct variant="primary mr-2">
                   <b-icon icon="gear"></b-icon>
                 </b-button>
-                <b-button v-b-modal.modal-deleteproduct variant="danger" @click="onDeleteProduct(data.item.id)">
+                <b-button  variant="danger" @click="onDeleteProduct(data.item.id)">
                   <b-icon icon="trash"></b-icon>
                 </b-button>
               </template>
@@ -32,7 +32,7 @@
         </div>
         <div class="addprod">
           <b-modal id="modal-addproduct" hide-footer title="BootstrapVue">
-            <b-form @submit="onSubmitAdd" @reset="onAddReset">
+            <b-form @submit="onSubmitAdd" @reset="onResetProduct">
               <b-form-group label="Name:" label-for="name">
                 <b-form-input v-model="formadd.name" required placeholder="Product Name">
                 </b-form-input>
@@ -76,7 +76,7 @@
                 <b-form-select id="input-3" v-model="formeditproduct.type" :options="types" required></b-form-select>
               </b-form-group>
               <b-button type="submit" @click="updateProduct" variant="primary mr-2">Update</b-button>
-              <b-button type="reset" @reset="onReset" variant="danger">Reset</b-button>
+              <b-button type="reset" @reset="onResetProduct" variant="danger">Reset</b-button>
             </b-form>
           </b-modal>
         </div>
@@ -96,7 +96,7 @@
                   <b-button @click="editCategory(dataCategory.item)" v-b-modal.modal-updateCategory variant="primary mr-2">
                     <b-icon icon="gear"></b-icon>
                   </b-button>
-                  <b-button v-b-modal.modal-deleteCategory variant="danger">
+                  <b-button v-b-modal.modal-deleteCategory variant="danger" >
                     <b-icon icon="trash"></b-icon>
                   </b-button>
                 </template>
@@ -117,10 +117,10 @@
               <b-table id="my-tableUser" :fields="fieldsUser" :items="setUser" :per-page="perPageUser"
                 :current-page="currentPageUser" responsive="sm">
                 <template #cell(action)="dataUser">
-                  <b-button @click="editUsers(dataUser.item)" v-b-modal.modal-updateUser variant="primary mr-2">
+                  <b-button @click="editUser(dataUser.item)" v-b-modal.modal-updateUser variant="primary mr-2">
                     <b-icon icon="gear"></b-icon>
                   </b-button>
-                  <b-button v-b-modal.modal-deleteUser variant="danger">
+                  <b-button  variant="danger" @click="onDeleteUser(dataUser.item.id)">
                     <b-icon icon="trash"></b-icon>
                   </b-button>
                 </template>
@@ -133,7 +133,7 @@
             <div>
               <b-modal id="modal-addUser" hide-footer title="SignUp">
                 <template>
-                  <b-form @submit.prevent="onSubmitSignup" @reset="onReset">
+                  <b-form @submit.prevent="onSubmitSignup" @reset="onResetUser">
                     <b-form-group id="input-group-1" label="Email address:" label-for="input-1">
                       <b-form-input id="input-1" v-model="formSignup.email" type="email" placeholder="Enter email"
                         required></b-form-input>
@@ -148,9 +148,6 @@
                       <b-form-input id="input-3" v-model="formSignup.name" placeholder="Enter name" required>
                       </b-form-input>
                     </b-form-group>
-
-
-
                     <b-button type="submit" variant="primary mr-2 mt-2">Submit</b-button>
                     <b-button type="reset" variant="danger mt-2">Reset</b-button>
                   </b-form>
@@ -158,8 +155,8 @@
               </b-modal>
             </div>
             <div class="updateUser">
-              <!-- <b-modal id="modal-updateUser" title="Update Product" hide-footer>
-                <b-form @submit.prevent="onSubmitSignupEdit" @reset="onReset">
+              <b-modal id="modal-updateUser" title="Update Product" hide-footer>
+                <b-form @submit.prevent="updateUser" @reset="onResetUser">
                     <b-form-group id="input-group-1" label="Email address:" label-for="input-1">
                       <b-form-input id="input-1" v-model="formSignupEdit.email" type="email" placeholder="Enter email to edit"
                         required></b-form-input>
@@ -176,8 +173,8 @@
                     </b-form-group>
 
                     <b-form-group id="input-group-4" label="Your Role:" label-for="input-">
-                      <b-form-input id="input-4" v-model="formSignupEdit.role" placeholder="Enter role to edit" required>
-                      </b-form-input>
+                      <b-form-select id="input-4" v-model="formSignupEdit.role" :options="role" placeholder="Enter role to edit" required>
+                      </b-form-select>
                     </b-form-group>
 
 
@@ -185,7 +182,7 @@
                     <b-button type="submit" variant="primary mr-2 mt-2">Submit</b-button>
                     <b-button type="reset" variant="danger mt-2">Reset</b-button>
                   </b-form>
-              </b-modal> -->
+              </b-modal>
             </div>
 
           </div>
@@ -260,6 +257,18 @@
 
         },
 
+        formSignupEdit: {
+          email: '',
+          password: '',
+          name: '',
+          role: null,
+        },
+
+        role: [{
+          text: 'Select One',
+          value: null
+        }, 'Admin', 'User'],
+
 
 
 
@@ -317,6 +326,15 @@
         })
       },
 
+       getAllDataProduct() {
+        axios.get(process.env.VUE_APP_URL + 'product')
+          .then(res => {
+            this.setproduct = res.data.result
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      },
 
       onSubmitAdd() {
         let formProduct = new FormData();
@@ -329,7 +347,8 @@
             method: 'post',
             url: process.env.VUE_APP_URL + 'product',
             headers: {
-              "Content-type": "multipart/form-data"
+              "Content-type": "multipart/form-data",
+              "authToken": this.$store.getters.getToken
             },
             data: formProduct
           })
@@ -341,16 +360,6 @@
             console.log(err);
           })
 
-      },
-
-      getAllDataProduct() {
-        axios.get(process.env.VUE_APP_URL + 'product')
-          .then(res => {
-            this.setproduct = res.data.result
-          })
-          .catch(err => {
-            console.log(err);
-          })
       },
 
       onDeleteProduct(id) {
@@ -380,7 +389,7 @@
         this.formeditproduct.type = value.type
       },
 
-      onReset(event) {
+      onResetProduct(event) {
         event.preventDefault()
         this.formeditproduct.name = ''
         this.formeditproduct.price = ''
@@ -477,9 +486,73 @@
 
       },
 
+      editUser(value) {
+        this.formSignupEdit.id = value.id
+        this.formSignupEdit.email = value.email
+        this.formSignupEdit.password = value.password
+        this.formSignupEdit.name = value.name
+        this.formSignupEdit.role = value.role
+      },
+      onResetUser(event) {
+        event.preventDefault()
+        this.formSignupEdit.name = ''
+        this.formSignupEdit.price = ''
+        this.formSignupEdit.image = ''
+        this.formSignupEdit.type = ''
+        this.show = false
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
 
 
+      onDeleteUser(id) {
+        console.log(id);
+        axios({
+            method: 'delete',
+            url: process.env.VUE_APP_URL + `users/${id}`,
+            headers: {
+              "authToken": this.$store.getters.getToken
+            }
+          })
+          .then(res => {
+            this.getAllDataUser()
+            console.log(res.data)
+          })
+          .catch(err => {
+            console.log(err);
+          })
 
+      },
+
+      updateUser() {
+        
+        // authtoken: this.dataToken.token,
+        axios({
+            method: "PUT",
+            url: process.env.VUE_APP_URL + "users",
+            headers: {
+              "authToken": this.$store.getters.getToken
+            },
+            data: this.formSignupEdit,
+          })
+          .then((res) => {
+            console.log("Masuk then");
+            console.log(res);
+            this.formEditProduct = [];
+            alert(res.data.description);
+            this.getAllProduct();
+            this.resetData();
+          })
+          .catch((err) => {
+            alert(err.message);
+          });
+      }
+      
+      
+      
+      
+      ,
       getAllDataCategory() {
         axios.get(process.env.VUE_APP_URL + 'category')
           .then(res => {

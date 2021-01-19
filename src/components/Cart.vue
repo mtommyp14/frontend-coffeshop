@@ -1,63 +1,45 @@
 <template>
-    <div>
-        <div class="cartright">
-            <div class="row">
-                <div class="cart_image col-4 mt-5">
-                    <img :src="image" class="img-fluid cart_images">
-                </div>
-                <div class="cart_content col-8 mt-5">
-                    <button type="button" class="close" data-dismiss="modal"
-                        aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h5 class="text-left ">{{name}}</h5>
-                    <div class="cart_price" >
-                        <div class="row">
-                            <div class="col-6 value-cart form-group row">
-                                <button class="btn btn-danger minbutton" > -
-                                </button>
-                                <input type="number" class="inputcart"  />
-                                <button class="btn btn-success plusbutton" > +
-                                </button>
-                            </div>
-                            <div class="col-6 text-right pt-2">
-                                <p>Rp. {{price}}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div>
+    <div class="cartright">
+      <div class="row" v-for="dataItem in addCart" :key="dataItem.id">
+        <div class="cart_image col-4 mt-5">
+          <img :src="dataItem.product.image" class="img-fluid cart_images">
         </div>
+        <div class="cart_content col-8 mt-5">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h5 class="text-left ">{{dataItem.product.name}}</h5>
+          <div class="cart_price">
+            <div class="row">
+              <div class="btn-group mr-2" role="group" aria-label="First group">
+                <button type="button" class="btn btn-warning"> - </button>
+                <button type="button" class="btn "  disabled> {{addValue}} </button>
+                <button type="button" class="btn btn-primary" > + </button>
+              </div>
+              <div class="col-6 text-right pt-2">
+                <p>Rp. {{dataItem.product.price}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: "Cart",
-        props: {
-            image: {
-                type: String,
-                required: true,
-            },
-            name: {
-                type: String,
-                required: true,
-            },
-            price: {
-                type: Number,
-                required: true,
-            },
-            
-            // cartprops: {
-            //     type: String,
-            //     required: true,
-            // }
-        }
-    }
+  export default {
+    name: "Cart",
+    props: [
+      "addCart",
+      "addValue"
+    ]
+  }
 </script>
 
 <style scoped>
-.cardcon {
+  .cardcon {
     width: 100vw;
     height: 100vh;
   }
