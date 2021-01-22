@@ -11,7 +11,7 @@ pipeline{
         stage("Install dependencies"){
 
             steps{
-                nodejs("node14 back"){
+                nodejs("node14 front"){
                     sh 'yarn install'
                 }
             }
