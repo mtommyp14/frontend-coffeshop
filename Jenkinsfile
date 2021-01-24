@@ -54,7 +54,7 @@ pipeline{
                                 transfers: [
                                     sshTransfer(
                                         execCommand: "docker pull ${images_name}; docker kill frontendVue; docker run -d --rm --name frontendVue -p 7080:80 ${images_name}",
-                                        execTimeout: 120000
+                                        execTimeout: 1200000
                                     )
                                 ]
                             )
