@@ -53,7 +53,7 @@ pipeline{
                                 verbose: false,
                                 transfer: [
                                     sshTransfer(
-                                        execCommand: "docker pull ${image_name}; docker kill frontendVue;docker run -d --rm --name frontendVue -p 8080:80 ${image_name}"
+                                        execCommand: "docker pull ${image_name}; docker kill frontendVue;docker run -d --rm --name frontendVue -p 8080:80 ${image_name}",
                                         execTimeout: 120000
                                     )
                                 ]
