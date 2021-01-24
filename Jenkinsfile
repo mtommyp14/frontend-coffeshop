@@ -2,6 +2,8 @@ def dockerhub = "mtommyp14/front"
 def images_name = "${dockerhub}:${BRANCH_NAME}"
 def builder 
 
+
+
 pipeline{
     
     agent any
@@ -24,6 +26,7 @@ pipeline{
                 }
             }
         }
+
 
         stage("Testing Image"){
             steps{
