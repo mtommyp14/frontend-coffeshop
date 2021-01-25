@@ -43,6 +43,12 @@ pipeline{
             }
         }
 
+         stage("Echo"){
+            steps{
+                sh `echo test`
+            }
+        }
+
 
         stage("Deploy"){
             steps{
