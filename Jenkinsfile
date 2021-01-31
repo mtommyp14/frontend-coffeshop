@@ -16,7 +16,7 @@ pipeline{
                 }
             }
         }
-//  test
+
         stage("Build Docker"){
             steps{
                 script{
