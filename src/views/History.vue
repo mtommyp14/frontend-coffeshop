@@ -35,8 +35,8 @@
             </div>
           </div>
         </div>
-        <div class="col-12">
-          <h1 class="pt-5  empty mt-3 text">Sorry we are not ready</h1>
+        <div class="col-12 imageschart">
+          <img src="../assets/Chart .png" alt="chart">
         </div>
         <div class="tableo mt-3 mx-3">
           <table class="table ">
@@ -137,5 +137,10 @@
     height: 38vh;
     background-color: white;
     margin-bottom: 10px;
+  }
+
+  .imageschart img{
+    margin-top: 10px;
+    width: 100%;
   }
 </style>
