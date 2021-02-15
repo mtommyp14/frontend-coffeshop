@@ -10,17 +10,11 @@
           <div class="row mainContainer">
             <div class="px-0 col-sm-8 col-md-8 col-lg-8 cardcon ">
               <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mt-3 mx-1">
-                
-                <div class="col mb-4 menu" v-for="cards in datas" :key="cards.id" >
-                  <Card 
-                  :name="cards.name" 
-                  :price="Number(cards.price)" 
-                  :image="cards.image" 
-                  :type="cards.type" 
-                  :prod="cards"
-                  @addProd="addCart"
-                  />
-                  
+
+                <div class="col mb-4 menu" v-for="cards in datas" :key="cards.id">
+                  <Card :name="cards.name" :price="Number(cards.price)" :image="cards.image" :type="cards.type"
+                    :prod="cards" @addProd="addCart" />
+
                 </div>
               </div>
             </div>
@@ -34,12 +28,37 @@
                 </div>
                 <div class="cartfill" v-else>
                   <div class="container col">
-                    <Cart :addCart="addCartProduct" :addValue="qty"/>
+                    <div class="cartright">
+                      <div class="row" v-for="(dataItem, index) in cart" :key="generateKey(dataItem.id, dataItem.count)">
+                        <div class="cart_image col-4 mt-5">
+                          <img :src="dataItem.image" 
+                            class="img-fluid cart_images">
+                        </div>
+                        <div class="cart_content col-8 mt-5">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click="cart.splice(index, 1)">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                          <h5 class="text-left ">{{dataItem.name}}</h5>
+                          <div class="cart_price">
+                            <div class="row">
+                              <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-warning"  @click="updateQty(dataItem.id,'DECRE')" > - </button>
+                                <button type="button" class="btn " disabled> {{dataItem.count}} </button>
+                                <button type="button" class="btn btn-primary" @click="updateQty(dataItem.id,'INCRE')"> + </button>
+                              </div>
+                              <div class="col-6 text-right pt-2">
+                                <p>Rp. {{dataItem.price * dataItem.count}}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div class="cart-order">
                     <div class="order-total mt-5">
                       <h5>
-                        <!-- Total Rp. {{totalprice}} -->
+                        Total Rp. {{totalprice}}
                       </h5>
                     </div>
                     <p class="pt-2">*Harga Belum Termasuk PPN</p>
@@ -52,7 +71,7 @@
             </div>
 
             <b-modal id="modal-1" title="Checkout" hide-footer>
-              <!-- <table class="table table-borderless">
+              <table class="table table-borderless">
                 <tbody>
                   <tr>
                     <td>Nomer Invoice: </td>
@@ -82,7 +101,7 @@
                   </tr>
                 </tbody>
               </table>
-              -->
+
               <button class="btn btn-block btn-primary checkoutbtn" @click="paymentCheckout()">Pay</button>
             </b-modal>
           </div>
@@ -102,7 +121,7 @@
   import Navbar from "../components/Navbar.vue";
   import Title from "../components/Title.vue";
   import Card from "../components/Card.vue";
-  import Cart from "../components/Cart.vue"
+  // import Cart from "../components/Cart.vue"
 
   export default {
     name: "product",
@@ -116,16 +135,21 @@
 
         idInvoice: 0,
         ppn: 0,
-        payment: [{ text: "Cash",value: 1}, {text: "Debit",value: 2}],
+        payment: [{
+          text: "Cash",
+          value: 1
+        }, {
+          text: "Debit",
+          value: 2
+        }],
 
-        formCheckout:{
-          
-          
+        formCheckout: {
+
           cashier: 'Pevita',
           ppn: null,
-          // totalprice: null,
+          totalprice: null,
 
-        } 
+        }
       };
 
     },
@@ -133,12 +157,10 @@
       Navbar,
       Title,
       Card,
-      Cart,
+      // Cart,
     },
 
     methods: {
-      
-      
       serach(value) {
         axios
           .get(process.env.VUE_APP_URL + "product/search/?search=" + value)
@@ -154,87 +176,52 @@
           });
       },
 
-      addCart(prod){
-        
-        let indexItem
-        let isExist = this.cart.filter((cards, index)=>{
-        console.log("masuk");
-          if(cards.product.id == prod.id){
-            indexItem = index
-            return true
-          }else{
-            return false
+      addCart(Prod) {
+        let result = this.cart.find((res) => {
+          if (res.id == Prod.id) {
+            return res.id;
           }
-        })
-        if(isExist.length){
-          this.cart[indexItem].qty++
-        }else{
-          this.cart.push({product :prod, qty: 1})
+          console.log(result);
+        });
+        if (result) {
+          for (let i = 0; i < this.cart.length; i++) {
+            if (this.cart[i].id == Prod.id) {
+              const newFood = {
+                ...this.cart[i],
+                count: this.cart[i].count + 1,
+              };
+              this.$set(this.cart, i, newFood);
+
+            }
+          }
+        } else {
+          Prod.count = 1;
+          this.cart.push(Prod);
+        }
+      },
+
+      generateKey(key1, key2){
+        return `${key1}-${key2}`
+      },
+
+      updateQty(id,mode) {
+      let result = this.cart.find((res) => {
+        if (res.id == id) {
+          return res.id;
+        }
+      });
+      if (result) {
+        for (let i = 0; i < this.cart.length; i++) {
+          if (this.cart[i].id == id) {
+            const newFood = {
+              ...this.cart[i],
+              count: mode === 'INCRE' ? this.cart[i].count + 1 : this.cart[i].count - 1,             
+            };
+            this.$set(this.cart, i, newFood);
+          }
         }
       }
-
-      // addFood() {
-      //   this.add++;
-      // },
-
-      // changeqty(id, mode){
-      //   let result = this.cart.find((res)=>{
-      //     if(res.id == id){
-      //       return res.id
-      //     }
-
-      //   })
-      //   if(result){
-      //     for(let i = 0; i < this.cart.length; i++){
-      //       if( this.cart[i].id == id ){
-      //         const cartObject = {
-      //           ...this.cart[i],
-      //           count: mode === 'PLUS' ? this.cart[i].count + 1 : this.cart[i].count - 1,
-      //         }
-      //         console.log("Masuk");
-
-      //         this.$set(this.cart, i, cartObject)
-      //       }
-
-      //     }
-      //   }
-      // },
-
-      // generateKey(key1, key2){
-      //   return `${key1}-${key2}`
-      // },
-
-
-
-      // checkoutPayment() {
-      //   this.idInvoice = Math.round(Math.random() * 10000 + 1)
-      //   this.ppn = this.totalprice * (10 / 100)
-      // },
-
-      
-      // paymentCheckout(){
-        
-      //   this.formCheckout.cashier = this.cashier
-      //   this.formCheckout.ppn = this.ppn
-      //   this.formCheckout.totalprice = this.calculate
-      //   axios({
-      //     method: "post",
-      //     url: process.env.VUE_APP_URL + "history",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     data: JSON.parse(JSON.stringify(this.formCheckout)),
-          
-      //   }) 
-      //   .then((res)=> {
-      //     console.log(res.data.result);
-      //   })
-      //   .catch((err)=>{
-      //     console.log(err);
-      //   })
-      // }
-
-   
+    },
     },
 
     mounted() {
@@ -249,31 +236,31 @@
     },
 
     computed: {
-      addCartProduct(){
+      addCartProduct() {
         return this.cart
       },
 
 
-      qty(){
+      qty() {
         let qty = 0
-        for(const key in this.cart ){
-          qty = qty + this.cart[key].qty
+        for (const key in this.cart) {
+          qty = qty + this.cart[key].count
         }
         return qty
+      },
+
+
+      totalprice() {
+        let total = 0
+        for (const res of this.cart) {
+          total += Number(res.price) * Number(res.count)
+        }
+        return total
+      },
+      calculate() {
+        let total = this.ppn + this.totalprice
+        return total
       }
-
-
-      // totalprice() {
-      //   let total = 0
-      //   for (const res of this.cart) {
-      //     total += Number(res.price)
-      //   }
-      //   return total
-      // },
-      // calculate() {
-      //   let total = this.ppn + this.totalprice
-      //   return total
-      // }
     }
   };
 </script>
@@ -324,5 +311,7 @@
 
   .checkoutbtn {
     width: 460px;
+    margin-left: 10px;
+    margin-right: 10px;
   }
 </style>

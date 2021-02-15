@@ -75,7 +75,7 @@
     }
 
     .card img {
-        padding-top: 10px;
+        padding-top: 0px;
         align-items: center;
         height: 200px;
         padding-bottom: 10px;

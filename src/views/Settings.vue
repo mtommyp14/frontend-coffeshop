@@ -518,15 +518,6 @@
           .catch(err => {
             console.log(err);
           })
-
-      },
-
-      editUser(value) {
-        this.formSignupEdit.id = value.id
-        this.formSignupEdit.email = value.email
-        this.formSignupEdit.password = value.password
-        this.formSignupEdit.name = value.name
-        this.formSignupEdit.role = value.role
       },
       onResetUser(event) {
         event.preventDefault()
@@ -539,32 +530,35 @@
           this.show = true
         })
       },
-
-
+      editUser(value) {
+        this.formSignupEdit.id = value.id_user
+        this.formSignupEdit.email = value.email
+        this.formSignupEdit.password = value.password
+        this.formSignupEdit.name = value.name
+        this.formSignupEdit.role = value.role
+        console.log(this.formSignupEdit);
+        console.log(value);
+      },
       updateUser() {
         axios({
             method: "PUT",
-            url: process.env.VUE_APP_URL + "users",
+            url: process.env.VUE_APP_URL + 'users',
             headers: {
+              "Content-Type": "application/json",
               "authToken": this.$store.getters.getToken
             },
             data: this.formSignupEdit,
           })
           .then((res) => {
-          
-            this.formEditProduct = [];
-            alert(res.data.description);
-            this.getAllProduct();
-            this.resetData();
+            this.getAllDataUser()
+            alert("Data Berhasil Di update");
+            console.log(res.data.result)
           })
           .catch((err) => {
             alert(err.message);
           });
       }
-      
-      
-      
-      
+     
       ,
       getAllDataCategory() {
         axios.get(process.env.VUE_APP_URL + 'category')
@@ -575,7 +569,6 @@
             console.log(err);
           })
       },
-
       onSubmitCategory() {
         axios({
             method: 'post',
@@ -622,15 +615,13 @@
           })
       },
       editCategory(value) {
-        console.log(value);  
-        this.formCategory.id = value.id
-        this.formCategory.type = value.type
-        
+        this.formCategory.id = value.id_category
+        this.formCategory.type = value.type         
       },
       onEditCategory() {
         axios({
             method: "PUT",
-            url: process.env.VUE_APP_URL + "category",
+            url: process.env.VUE_APP_URL + `category`,
             headers: {
               "Content-Type": "application/json",
               "authToken": this.$store.getters.getToken
@@ -639,6 +630,7 @@
           })
           .then((res) => {
            this.getAllDataCategory()
+           alert("Data Berhasil Di update");
             console.log(res.data.result)
           })
           .catch((err) => {
