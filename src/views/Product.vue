@@ -29,22 +29,25 @@
                 <div class="cartfill" v-else>
                   <div class="container col">
                     <div class="cartright">
-                      <div class="row" v-for="(dataItem, index) in cart" :key="generateKey(dataItem.id, dataItem.count)">
+                      <div class="row" v-for="(dataItem, index) in cart"
+                        :key="generateKey(dataItem.id, dataItem.count)">
                         <div class="cart_image col-4 mt-5">
-                          <img :src="dataItem.image" 
-                            class="img-fluid cart_images">
+                          <img :src="dataItem.image" class="img-fluid cart_images">
                         </div>
                         <div class="cart_content col-8 mt-5">
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click="cart.splice(index, 1)">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            v-on:click="cart.splice(index, 1)">
                             <span aria-hidden="true">&times;</span>
                           </button>
                           <h5 class="text-left ">{{dataItem.name}}</h5>
                           <div class="cart_price">
                             <div class="row">
                               <div class="btn-group mr-2" role="group" aria-label="First group">
-                                <button type="button" class="btn btn-warning"  @click="updateQty(dataItem.id,'DECRE')" > - </button>
+                                <button type="button" class="btn btn-warning" @click="updateQty(dataItem.id,'DECRE')"> -
+                                </button>
                                 <button type="button" class="btn " disabled> {{dataItem.count}} </button>
-                                <button type="button" class="btn btn-primary" @click="updateQty(dataItem.id,'INCRE')"> + </button>
+                                <button type="button" class="btn btn-success" @click="updateQty(dataItem.id,'INCRE')"> +
+                                </button>
                               </div>
                               <div class="col-6 text-right pt-2">
                                 <p>Rp. {{dataItem.price * dataItem.count}}</p>
@@ -62,7 +65,7 @@
                       </h5>
                     </div>
                     <p class="pt-2">*Harga Belum Termasuk PPN</p>
-                    <button class="btn btn-primary btn-block" v-b-modal.modal-1>
+                    <button class="btn btn-primary btncheckout" @click="paymentCheckout()" v-b-modal.modal-1>
                       Checkout
                     </button>
                   </div>
@@ -75,7 +78,7 @@
                 <tbody>
                   <tr>
                     <td>Nomer Invoice: </td>
-                    <td>{{idInvoice}}</td>
+                    <td>#{{idInvoice}}</td>
                   </tr>
                   <tr>
                     <td>Nama Cashier: </td>
@@ -83,15 +86,23 @@
                   </tr>
                   <tr v-for="invoiceFood in cart" :key="invoiceFood.id">
                     <td>{{invoiceFood.name}}</td>
-                    <td>Rp {{invoiceFood.price}}</td>
+                    <td>Rp {{invoiceFood.price * invoiceFood.count}}</td>
                   </tr>
                   <tr>
                     <td>Ppn</td>
-                    <td>{{ppn}}</td>
+                    <td>10%</td>
                   </tr>
                   <tr>
                     <td>Total Bayar </td>
                     <td>Rp {{calculate}}</td>
+                  </tr>
+                  <tr>
+                    <td> <label for="example-datepicker">Choose a date</label>
+                      
+                    </td>
+                    <td>
+                      <b-form-datepicker id="example-datepicker" v-model="datecheck" class="mb-2"></b-form-datepicker>
+                    </td>
                   </tr>
                   <tr>
                     <td>Payment</td>
@@ -99,10 +110,11 @@
                       <b-form-select id="input-3" :options="payment" required></b-form-select>
                     </td>
                   </tr>
+
                 </tbody>
               </table>
 
-              <button class="btn btn-block btn-primary checkoutbtn" @click="paymentCheckout()">Pay</button>
+              <button class="btn btn-block btn-primary checkoutbtn" @click="checkoutPay()">Pay</button>
             </b-modal>
           </div>
         </main>
@@ -121,7 +133,6 @@
   import Navbar from "../components/Navbar.vue";
   import Title from "../components/Title.vue";
   import Card from "../components/Card.vue";
-  // import Cart from "../components/Cart.vue"
 
   export default {
     name: "product",
@@ -132,9 +143,19 @@
         add: 1,
         cart: [],
 
-
         idInvoice: 0,
         ppn: 0,
+        datecheck: '',
+
+
+        formCheckout: {
+          invoice: '',
+          namehis: '',
+          cashier: 'Pevita',
+          ppn: '10',
+          totalprice: '',
+          date: '' 
+        },
         payment: [{
           text: "Cash",
           value: 1
@@ -142,14 +163,6 @@
           text: "Debit",
           value: 2
         }],
-
-        formCheckout: {
-
-          cashier: 'Pevita',
-          ppn: null,
-          totalprice: null,
-
-        }
       };
 
     },
@@ -157,7 +170,6 @@
       Navbar,
       Title,
       Card,
-      // Cart,
     },
 
     methods: {
@@ -200,32 +212,65 @@
         }
       },
 
-      generateKey(key1, key2){
+      generateKey(key1, key2) {
         return `${key1}-${key2}`
       },
 
-      updateQty(id,mode) {
-      let result = this.cart.find((res) => {
-        if (res.id == id) {
-          return res.id;
-        }
-      });
-      if (result) {
-        for (let i = 0; i < this.cart.length; i++) {
-          if (this.cart[i].id == id) {
-            const newFood = {
-              ...this.cart[i],
-              count: mode === 'INCRE' ? this.cart[i].count + 1 : this.cart[i].count - 1,             
-            };
-            this.$set(this.cart, i, newFood);
+      updateQty(id, mode) {
+        let result = this.cart.find((res) => {
+          if (res.id == id) {
+            return res.id;
+          }
+        });
+        if (result) {
+          for (let i = 0; i < this.cart.length; i++) {
+            if (this.cart[i].id == id) {
+              const newFood = {
+                ...this.cart[i],
+                count: mode === 'INCRE' ? this.cart[i].count + 1 : this.cart[i].count - 1,
+              };
+              this.$set(this.cart, i, newFood);
+            }
+
           }
         }
-      }
-    },
-    },
+      },
+      paymentCheckout() {
+        this.idInvoice = Math.round(Math.random() * 1000 + 1);
+        this.ppn = this.totalprice * (10 / 100)
+      },
 
-    mounted() {
-      axios
+      checkoutPay() {
+        this.formCheckout.invoice = this.idInvoice
+        let foodname = [];
+        this.cart.forEach((value) => {
+          foodname.push(value.name)
+        });
+        this.formCheckout.namehis = foodname.join(", ").toString();
+        this.formCheckout.totalprice = this.calculate;
+        this.formCheckout.date = this.datecheck;
+
+        axios({
+            method: 'post',
+            url: process.env.VUE_APP_URL + `history`,
+            headers: {
+              "authToken": this.$store.getters.getToken
+            },
+            data: this.formCheckout,
+          })
+          .then(res => {
+            console.log(res.data)
+            alert("Your payment was success")
+
+          })
+          .catch(err => {
+            console.log(err);
+            alert("Not you authorize, just admin can do that. If you wanna see my fiture, you can use user: tom1@gmail.com pass: tom1 ")
+          })
+      },
+
+      getDataProduct(){
+        axios
         .get(process.env.VUE_APP_URL + "product")
         .then((res) => {
           this.datas = res.data.result;
@@ -233,6 +278,14 @@
         .catch((err) => {
           console.log(err);
         });
+      }
+
+
+
+    },
+
+    mounted() {
+      this.getDataProduct()
     },
 
     computed: {
@@ -249,7 +302,6 @@
         return qty
       },
 
-
       totalprice() {
         let total = 0
         for (const res of this.cart) {
@@ -260,7 +312,8 @@
       calculate() {
         let total = this.ppn + this.totalprice
         return total
-      }
+      },
+
     }
   };
 </script>
@@ -313,5 +366,9 @@
     width: 460px;
     margin-left: 10px;
     margin-right: 10px;
+  }
+
+  .btncheckout {
+    width: 450px;
   }
 </style>

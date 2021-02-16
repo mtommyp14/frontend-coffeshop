@@ -39,40 +39,17 @@
           <img src="../assets/Chart .png" alt="chart">
         </div>
         <div class="tableo mt-3 mx-3">
-          <table class="table ">
-            <thead>
-              <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Invoice</th>
-                <th scope="col">Name</th>
-                <th scope="col">Cashier</th>
-                <th scope="col">PPN</th>
-                <th scope="col">Total Price</th>
-                <th scope="col">Date</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="history in dataHistory" :key="history.id">
-                <th scope="row">{{history.id_history}}</th>
-                <td>{{history.invoice}}</td>
-                <td>{{history.namehis}}</td>
-                <td>{{history.cashier}}</td>
-                <td>{{history.ppn}}</td>
-                <td>{{history.totalprice}}</td>
-                <td>{{history.date}}</td>
-                <td>
-                  <b-button v-b-modal.modal-update variant="primary mr-2">
-                    <b-icon icon="gear"></b-icon>
-                  </b-button>
-                  <b-button v-b-modal.modal-delete variant="danger">
+          <b-table id="my-tableCategory" :fields="fieldsHistory" :items="setHistory" :per-page="perPageHistory"
+                :current-page="currentPageHistory" responsive="sm">
+                <template #cell(action)="dataHistory"> 
+                  <b-button v-b-modal.modal-deleteHistory variant="danger" @click="onDeleteHistory(dataHistory.item.id_history)">
                     <b-icon icon="trash"></b-icon>
                   </b-button>
-                </td>
-              </tr>
-
-            </tbody>
-          </table>
+                </template>
+              </b-table>
+              <b-pagination v-model="currentPageHistory" :total-rows="rowsHistory" :per-page="perPageHistory"
+                aria-controls="my-tableHistory" align="center">
+              </b-pagination>
         </div>
       </div>
       <div>
@@ -89,7 +66,8 @@
 
 <script scoped>
   import Navbar from '../components/Navbar.vue'
-  import Axios from 'axios';
+  import axios from 'axios';
+
 
   export default {
     components: {
@@ -98,18 +76,54 @@
     name: "History",
     data() {
       return {
-        dataHistory: '',
+        perPageHistory: 3,
+        currentPageHistory: 1,
+        setHistory: [],
+        fieldsHistory: ['id_history', 'invoice', 'namehis', 'cashier', 'ppn', 'totalprice', 'date', 'action'],
+
       }
     },
+
     mounted() {
-      Axios.get('history')
-        .then(res => {
-          this.dataHistory = res.data.result
-        })
-        .catch(err => {
-          console.log(err);
-        })
-    }
+      this.getDataHistory()
+    },
+
+    computed: {
+      rowsHistory() {
+        return this.setHistory.length
+      },
+    },
+
+    methods: {
+      getDataHistory(){
+        axios.get(process.env.VUE_APP_URL + 'history')
+          .then(res => {
+            this.setHistory = res.data.result
+          })
+          .catch(err => {
+            console.log(err);
+          })
+      },
+      onDeleteHistory(id){
+        console.log(id);
+        axios({
+            method: 'delete',
+            url: process.env.VUE_APP_URL + `history/${id}`,
+            headers: {
+              "authToken": this.$store.getters.getToken
+            }
+          })
+          .then(res => {
+            this.getDataHistory()
+            console.log(res.data)
+          })
+          .catch(err => {
+            console.log(err);
+            alert("Not you authorize, just admin can do that. If you wanna see my fiture, you can use user: tom1@gmail.com pass: tom1 ")
+          })
+      }
+    },
+    
 
   }
 </script>

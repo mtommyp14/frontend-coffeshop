@@ -1,5 +1,5 @@
 <template>
-    <div class="col-sm-1 col-md-1 col-lg-1 px-0 bg-white">
+    <div class="col-sm-1 col-md-1 col-lg-1 px-0 bg-white navtleft">
         
         <nav>
                 <ul>
@@ -89,15 +89,7 @@
 
     }
 
+
    
 
-    /* 
-    .form-nav {
-        margin: 150px 0 0 380px;
-        align-items: center;
-        opacity: 100%;
-        padding-left: 150px;
-        padding-right: 100px;
-        z-index: 999;
-    } */
 </style>

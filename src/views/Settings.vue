@@ -337,6 +337,7 @@
           })
           .catch(err => {
             console.log(err);
+            
           })
       },
 
@@ -366,6 +367,7 @@
           })
           .catch(err => {
             console.log(err);
+            alert("Not you authorize, just admin can do that. If you wanna see my fiture, you can use user: tom1@gmail.com pass: tom1 ")
           })
       },
 
@@ -384,6 +386,7 @@
           })
           .catch(err => {
             console.log(err);
+            alert("Not you authorize, just admin can do that. If you wanna see my fiture, you can use user: tom1@gmail.com pass: tom1 ")
           })
 
       },
@@ -458,6 +461,7 @@
           })
           .catch((err) => {
             alert(err.message);
+            alert("Not you authorize, just admin can do that. If you wanna see my fiture, you can use user: tom1@gmail.com pass: tom1 ")
           });
       },
 
@@ -474,6 +478,7 @@
           })
           .catch(err => {
             console.log(err);
+            alert("Not you authorize, just admin can do that. If you wanna see my fiture, you can use user: tom1@gmail.com pass: tom1 ")
           })
       },
 
@@ -498,6 +503,7 @@
           })
           .catch(err => {
             console.log(err);
+            alert("Not you authorize, just admin can do that. If you wanna see my fiture, you can use user: tom1@gmail.com pass: tom1 ")
           })
 
       },
@@ -517,6 +523,7 @@
           })
           .catch(err => {
             console.log(err);
+            alert("Not you authorize, just admin can do that. If you wanna see my fiture, you can use user: tom1@gmail.com pass: tom1 ")
           })
       },
       onResetUser(event) {
@@ -556,6 +563,7 @@
           })
           .catch((err) => {
             alert(err.message);
+            alert("Not you authorize, just admin can do that. If you wanna see my fiture, you can use user: tom1@gmail.com pass: tom1 ")
           });
       }
      
@@ -567,6 +575,7 @@
           })
           .catch(err => {
             console.log(err);
+            alert("Not you authorize, just admin can do that. If you wanna see my fiture, you can use user: tom1@gmail.com pass: tom1 ")
           })
       },
       onSubmitCategory() {
@@ -585,6 +594,7 @@
           })
           .catch(err => {
             console.log(err);
+            alert("Not you authorize, just admin can do that. If you wanna see my fiture, you can use user: tom1@gmail.com pass: tom1 ")
           })
       },
       onResetCategory(event) {
@@ -612,6 +622,7 @@
           })
           .catch(err => {
             console.log(err);
+            alert("Not you authorize, just admin can do that. If you wanna see my fiture, you can use user: tom1@gmail.com pass: tom1 ")
           })
       },
       editCategory(value) {
@@ -635,6 +646,7 @@
           })
           .catch((err) => {
             alert(err.message);
+            alert("Not you authorize, just admin can do that. If you wanna see my fiture, you can use user: tom1@gmail.com pass: tom1 ")
           });
       }
     }
