@@ -23,10 +23,28 @@ pipeline{
             }
         }
 
-        stage("Build Docker"){
+        stage("Build Docker - Main"){
+            when {
+                expression {
+                    params.DEPLOY == "main"
+                }
+            }
             steps{
                 script{
-                    builder = docker.build("${dockerhub}:${BRANCH_NAME}")
+                    builder = docker.build("${dockerhub}:${env.BRANCH_NAME}")
+                }
+            }
+        }
+
+        stage("Build Docker - Production"){
+            when {
+                expression {
+                    params.DEPLOY == "production"
+                }
+            }
+            steps{
+                script{
+                    builder = docker.build("${dockerhub}:${env.BRANCH_NAME}")
                 }
             }
         }
