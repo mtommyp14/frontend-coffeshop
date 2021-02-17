@@ -82,7 +82,7 @@ pipeline{
                                 verbose: false,
                                 transfers: [
                                     sshTransfer(
-                                        execCommand: "docker pull ${images_name}; docker kill frontendVue; docker run -d --rm --name frontendVue -p 7171:7171 ${images_name}",
+                                        execCommand: "docker pull ${images_name}; docker kill frontendVue; docker run -d --rm --name frontendVue -p 8080:8080 ${images_name}",
                                         execTimeout: 1200000
                                     )
                                 ]
@@ -107,7 +107,7 @@ pipeline{
                                 verbose: false,
                                 transfers: [
                                     sshTransfer(
-                                        execCommand: "docker pull ${images_name}; docker kill frontendVue; docker run -d --rm --name frontendVue -p 7171:7171 ${images_name}",
+                                        execCommand: "docker pull ${images_name}; docker kill frontendVue; docker run -d --rm --name frontendVue -p 8080:8080 ${images_name}",
                                         execTimeout: 1200000
                                     )
                                 ]
