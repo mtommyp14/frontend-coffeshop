@@ -50,6 +50,11 @@ pipeline{
         }
 
         stage("Testing Image"){
+            when {
+                expression {
+                    params.RUNTEST
+                }
+            }
             steps{
                 script{
                     builder.inside{
@@ -59,13 +64,13 @@ pipeline{
             }
         }
 
-        stage("Push Image"){
-            steps{
-                script{
-                        builder.push()
-                    }
-            }
-        }
+        // stage("Push Image"){
+        //     steps{
+        //         script{
+        //                 builder.push()
+        //             }
+        //     }
+        // }
 
         stage("Deploy Image Main"){
             when {
