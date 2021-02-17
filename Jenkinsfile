@@ -6,6 +6,12 @@ pipeline{
     
     agent any
 
+    parameters {
+        string(name: 'DOCKERHUB', defaultValue: 'Frontend ID', description: 'DockerID-Frontend')
+        booleanParam(name: 'RUNTEST', defaultValue: 'false', description: 'Check to Runnig Test image')
+        choice(name: 'DEPLOY', choices: ["main", "production"], description: 'Choice build to')
+    }
+
     stages{
 
         stage("Install dependencies"){
