@@ -67,7 +67,7 @@ pipeline{
             }
         }
 
-        stage("Deploy"){
+        stage("Deploy Image Main"){
             when {
                 expression {
                     params.DEPLOY == "main"
@@ -92,7 +92,7 @@ pipeline{
                 }
             }
         }
-        stage("Deploy"){
+        stage("Deploy Image Production"){
             when {
                 expression {
                     params.DEPLOY == "production"
