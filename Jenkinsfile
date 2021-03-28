@@ -17,7 +17,7 @@ pipeline{
         stage("Install dependencies"){
 
             steps{
-                nodejs("yarn14"){
+                nodejs("node14_front"){
                     sh 'yarn install'
                 }
             }
@@ -64,13 +64,6 @@ pipeline{
             }
         }
 
-        // stage("Push Image"){
-        //     steps{
-        //         script{
-        //                 builder.push()
-        //             }
-        //     }
-        // }
 
         stage("Deploy Image Main"){
             when {

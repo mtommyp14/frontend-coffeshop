@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+    frontend:
+      container_name: frontend
+      image: mtommyp14/front:main
+      ports: 
+          - "6969:8080"
+      networks: 
+          - devopsnet
+      environment:
+          - VUE_APP_URL=http://3.83.153.65:9293/api/
+          - VUE_APP_API=3.83.153.65:9293/api/
+
+networks: 
+  devopsnet:
